@@ -3,9 +3,16 @@
     "outDir": "public/scripts",
     "target": "ES2015",
     "module": "ES2015",
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "types": [
+      "mocha",
+      "node"
+    ]
   },
   "files": [
     "src/index.ts"
+  ],
+  "include": [
+    "src/test/*"
   ]
 }
