@@ -44,7 +44,7 @@ class TreeStore {
    * @returns объект элемента
    */
   public getItem(id: string | number): Item | undefined {
-    return this.tree.get(id).source;
+    return this.tree.get(id)?.source;
   }
 
   /**
@@ -86,7 +86,7 @@ class TreeStore {
     const parents: Item[] = [];
     let current: Item | undefined = item;
 
-    while (current && current.parent != 'root') {
+    while (current) {
       current = this.getItem(current.parent);
 
       if (current)

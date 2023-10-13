@@ -24,7 +24,8 @@ class TreeStore {
      * @returns объект элемента
      */
     getItem(id) {
-        return this.tree.get(id).source;
+        var _a;
+        return (_a = this.tree.get(id)) === null || _a === void 0 ? void 0 : _a.source;
     }
     /**
     *
@@ -60,7 +61,7 @@ class TreeStore {
             return [];
         const parents = [];
         let current = item;
-        while (current && current.parent != 'root') {
+        while (current) {
             current = this.getItem(current.parent);
             if (current)
                 parents.push(current);
