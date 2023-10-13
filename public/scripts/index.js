@@ -1,17 +1,22 @@
 class TreeStore {
     constructor(items) {
-        /*
-        Создание дубликата массива по правилам хорошего тона.
-        Но можно просто присвоить ссылку на items, если необходимо вернуть именно его в методе getAll
-        */
-        this.items = [...items];
+        this.tree = new Map(); // Создаем карту, чтобы находить элементы по id
+        // Присвоена ссылка на исходный массив, т.к. метод getAll должен возвращать исходный массив
+        this.sourceItems = items;
+        this.sourceItems.forEach((item, i, items) => {
+            this.tree.set(item.id, {
+                source: item,
+                childrenId: items.filter(potentialChild => potentialChild.parent === item.id)
+                    .map(child => child.id)
+            });
+        });
     }
     /**
      *
      * @returns изначальный массив элементов
      */
     getAll() {
-        return this.items;
+        return this.sourceItems;
     }
     /**
      *
@@ -19,7 +24,7 @@ class TreeStore {
      * @returns объект элемента
      */
     getItem(id) {
-        return this.items.find((item) => item.id === id);
+        return this.tree.get(id).source;
     }
     /**
     *
@@ -27,7 +32,7 @@ class TreeStore {
     * @returns массив элементов, являющихся дочерними для этого элемента. Если нет дочерних, возвращает пустой массив
     */
     getChildren(id) {
-        return this.items.filter((item) => item.parent === id);
+        return this.tree.get(id).childrenId.map(id => this.getItem(id));
     }
     /**
      *
@@ -55,7 +60,7 @@ class TreeStore {
             return [];
         const parents = [];
         let current = item;
-        while (current) {
+        while (current && current.parent != 'root') {
             current = this.getItem(current.parent);
             if (current)
                 parents.push(current);

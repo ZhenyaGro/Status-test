@@ -5,15 +5,29 @@ type Item = {
   type?: string | null;
 };
 
+// Тип обертка для создания карты связей
+type Wrap = {
+  source: Item;
+  childrenId: (string | number)[];
+}
+
 class TreeStore {
-  private items: Item[];
+  private sourceItems: Item[];
+  private tree = new Map<string | number, Wrap>(); // Создаем карту, чтобы находить элементы по id
 
   constructor(items: Item[]) {
-    /*
-    Создание дубликата массива по правилам хорошего тона.
-    Но можно просто присвоить ссылку на items, если необходимо вернуть именно его в методе getAll
-    */
-    this.items = [...items];
+    // Присвоена ссылка на исходный массив, т.к. метод getAll должен возвращать исходный массив
+    this.sourceItems = items;
+    this.sourceItems.forEach((item, i, items) => {
+      this.tree.set(
+        item.id,
+        {
+          source: item,
+          childrenId: items.filter(potentialChild => potentialChild.parent === item.id)
+            .map(child => child.id)
+        }
+      )
+    });
   }
 
   /**
@@ -21,7 +35,7 @@ class TreeStore {
    * @returns изначальный массив элементов
    */
   public getAll(): Item[] {
-    return this.items;
+    return this.sourceItems;
   }
 
   /**
@@ -30,7 +44,7 @@ class TreeStore {
    * @returns объект элемента
    */
   public getItem(id: string | number): Item | undefined {
-    return this.items.find((item) => item.id === id);
+    return this.tree.get(id).source;
   }
 
   /**
@@ -39,7 +53,7 @@ class TreeStore {
   * @returns массив элементов, являющихся дочерними для этого элемента. Если нет дочерних, возвращает пустой массив
   */
   public getChildren(id: string | number): Item[] {
-    return this.items.filter((item) => item.parent === id);
+    return this.tree.get(id).childrenId.map(id => this.getItem(id));
   }
 
   /**
@@ -72,7 +86,7 @@ class TreeStore {
     const parents: Item[] = [];
     let current: Item | undefined = item;
 
-    while (current) {
+    while (current && current.parent != 'root') {
       current = this.getItem(current.parent);
 
       if (current)
