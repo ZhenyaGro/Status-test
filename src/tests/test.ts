@@ -1,5 +1,5 @@
-import { ts } from "..";
-import { items as expects } from "./expect";
+import { ts } from "../index.js";
+import { items as expects } from "./expect.js";
 import * as assert from "assert";
 
 it('Получить исходный массив', () => {
