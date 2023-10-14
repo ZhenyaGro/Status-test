@@ -78,7 +78,7 @@ export class TreeStore {
     const queue: Item[] = this.getChildren(id);
 
     while (queue.length > 0) {
-      const current = queue.shift()!;
+      const current = queue.shift();
       children.push(current);
       queue.push(...this.getChildren(current.id));
     }
