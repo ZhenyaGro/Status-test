@@ -1,11 +1,12 @@
 {
   "name": "status-test",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "public/scripts/index.js",
   "scripts": {
     "build": "rm -rf public/scripts && tsc",
-    "test": "mocha 'public/scripts/test'"
+    "test": "mocha 'public/scripts/tests'"
   },
   "author": "ZhenyaGro",
   "license": "ISC",
