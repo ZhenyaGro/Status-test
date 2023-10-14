@@ -1,5 +1,5 @@
-import { TreeStore } from "./classes/treeStore";
-import { items } from "./data/items";
+import { TreeStore } from "./classes/treeStore.js";
+import { items } from "./data/items.js";
 
 export const ts = new TreeStore(items);
 
