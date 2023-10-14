@@ -1,7 +1,6 @@
 import { Item, Wrap } from "../types/types";
 
-
-module.exports = class TreeStore {
+export class TreeStore {
   private sourceItems: Item[];
   private tree = new Map<string | number, Wrap>(); // Создание карты для хранения и поиска элементов по id
 
